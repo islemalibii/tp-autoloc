@@ -21,5 +21,15 @@ public class Reservation {
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private StatutReservation statut;
+
+    @ManyToOne
+    private Client client;
+
+    @ManyToOne
+    private Vehicule vehicule;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Contrat contrat;
 }
+
 
