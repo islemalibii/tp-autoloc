@@ -21,7 +21,7 @@ public class Equipement {
     private Long idEquipement;
     private String libelle;
 
-    @ManyToMany(mappedBy = "equipements")
+    @ManyToMany(mappedBy = "equipements", cascade = CascadeType.ALL)
     private List<Vehicule> vehicules;
 }
 
