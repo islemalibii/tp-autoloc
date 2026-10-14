@@ -33,6 +33,10 @@ public class Agence {
 
     @OneToMany(mappedBy = "agence", cascade = CascadeType.ALL)
     private List<Vehicule> vehicules;
+
+    public Long getIdAgence() {
+        return idAgence;
+    }
 }
 
 
