@@ -14,6 +14,8 @@ import tn.esprit.autoloc.domain.enums.StatutVehicule;
 import tn.esprit.autoloc.repository.IAgenceRepository;
 import tn.esprit.autoloc.repository.IClientRepository;
 import tn.esprit.autoloc.repository.IVehiculeRepository;
+import tn.esprit.autoloc.service.IAgenceService;
+import tn.esprit.autoloc.service.IClientService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,6 +38,13 @@ class TpAutolocApplicationTests {
 
     @Autowired
     IVehiculeRepository vehiculeRepository;
+
+    @Autowired
+    IAgenceService agenceService;
+    @Autowired
+    IClientService clientService;
+
+
 
     @Test
     @Order(1)
@@ -136,9 +145,85 @@ class TpAutolocApplicationTests {
 
         vehiculeRepository.deleteById(saved.getIdVehicule());
         assertFalse(vehiculeRepository.existsById(saved.getIdVehicule()));
+    }
 
+    @Test
+    @Order(4)
+    void testAgenceService() {
+        System.out.println("**Agenceee service**");
+        Agence agence = new Agence();
+        agence.setNom("Agence3");
+        agence.setTelephone("14522212");
+        agence.setAdresse("esprit");
+        agence.setVille("tunis");
+
+        Agence saved = agenceService.create(agence);
+        System.out.println("agence cree : " + saved);
+
+        List<Agence> agences = agenceService.findAll();
+        System.out.println("toutes les agences : " + agences);
+        assertFalse(agences.isEmpty());
+
+        Long id = saved.getIdAgence();
+        Agence trouve = agenceService.findById(id);
+        System.out.println("agence trouvee : " + trouve);
+        assertNotNull(trouve);
+        assertEquals("Agence2", trouve.getNom());
+
+
+
+        long nb = agenceService.findAll().size();
+        System.out.println("nombre d'agences : " + nb);
+        assertTrue(nb >= 1);
+
+        agenceService.deleteById(id);
+        System.out.println("agence supprimee");
 
     }
+
+
+    @Test
+    @Order(5)
+    void testClientService() {
+        System.out.println("**Client**");
+        Client client1 = new Client();
+        client1.setNom("c3");
+        client1.setPrenom("c1per");
+        client1.setTelephone("14522212");
+        client1.setEmail("c1@mail.com");
+
+        Client client2 = new Client();
+        client2.setNom("c4");
+        client2.setPrenom("c2per");
+        client2.setTelephone("1487812");
+        client2.setEmail("c2@mail.com");
+
+        Client s1 = clientService.create(client1);
+        Client s2 = clientService.create(client2);
+        System.out.println("Client 1 : " + s1);
+        System.out.println("Client 2 : " + s2);
+
+        List<Client> clients = clientService.findAll();
+        System.out.println("Tous les clients : " + clients);
+        assertFalse(clients.isEmpty());
+
+        Long id = s1.getIdClient();
+        Client trouve = clientService.findById(id);
+        System.out.println("client trouvee : " + trouve);
+        assertNotNull(trouve);
+        assertEquals("c1", trouve.getNom());
+
+
+
+        long nb = clientService.findAll().size();
+        System.out.println("nombre de client : " + nb);
+        assertTrue(nb >= 1);
+
+        clientService.deleteById(id);
+        System.out.println("client supprimee");
+
+    }
+
 
 
 
