@@ -30,13 +30,17 @@ public class AgenceServiceImpl implements IAgenceService {
     public List<Agence> findAll() {
         return agenceRepository.findAll();
     }
+
     @Override
     public Agence update(Long id, Agence agence) {
         Agence existant = findById(id);
-// recopier ici les autres attributs modifiables du contrat (Atelier 2),
-// sans toucher à l'identifiant ni à la collection de paiements
+        existant.setNom(agence.getNom());
+        existant.setVille(agence.getVille());
+        existant.setAdresse(agence.getAdresse());
+        existant.setTelephone(agence.getTelephone());
         return agenceRepository.save(existant);
     }
+
     @Override
     public void deleteById(Long id) {
         if (!agenceRepository.existsById(id)) {

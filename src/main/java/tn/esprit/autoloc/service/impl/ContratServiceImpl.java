@@ -29,14 +29,16 @@ public class ContratServiceImpl implements IContratService {
     public List<Contrat> findAll() {
         return contratRepository.findAll();
     }
+
     @Override
     public Contrat update(Long id, Contrat contrat) {
         Contrat existant = findById(id);
+        existant.setDateSignature(contrat.getDateSignature());
         existant.setMontantTotal(contrat.getMontantTotal());
-// recopier ici les autres attributs modifiables du contrat (Atelier 2),
-// sans toucher à l'identifiant ni à la collection de paiements
+        existant.setValide(contrat.getValide());
         return contratRepository.save(existant);
     }
+
     @Override
     public void deleteById(Long id) {
         if (!contratRepository.existsById(id)) {

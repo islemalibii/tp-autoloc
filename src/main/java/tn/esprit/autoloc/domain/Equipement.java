@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,8 @@ public class Equipement {
     private Long idEquipement;
     private String libelle;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "equipements", cascade = CascadeType.ALL)
-    //@JsonManagedReference("equipements-vehicules")
     private List<Vehicule> vehicules;
 }
 

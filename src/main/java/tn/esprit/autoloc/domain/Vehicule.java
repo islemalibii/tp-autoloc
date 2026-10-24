@@ -46,7 +46,6 @@ public class Vehicule {
     private List<Maintenance> maintenances;
 
     @ManyToMany
-    //@JsonBackReference("equipements-vehicules")
     private List<Equipement> equipements;
 
 

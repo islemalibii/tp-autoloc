@@ -38,9 +38,9 @@ public class ReservationServiceImpl implements IReservationService {
     @Override
     public Reservation update(Long id, Reservation reservation) {
         Reservation existant = findById(id);
-
-        // Recopier ici les attributs modifiables de la réservation.
-
+        existant.setDateDebut(reservation.getDateDebut());
+        existant.setDateFin(reservation.getDateFin());
+        existant.setStatut(reservation.getStatut());
         return reservationRepository.save(existant);
     }
 

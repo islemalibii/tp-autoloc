@@ -38,9 +38,12 @@ public class MaintenanceServiceImpl implements IMaintenanceService {
     @Override
     public Maintenance update(Long id, Maintenance maintenance) {
         Maintenance existant = findById(id);
-
-        // Recopier ici les attributs modifiables de la maintenance.
-
+        existant.setDateDebut(maintenance.getDateDebut());
+        existant.setDateFin(maintenance.getDateFin());
+        existant.setDescription(maintenance.getDescription());
+        if (maintenance.getVehicule() != null) {
+            existant.setVehicule(maintenance.getVehicule());
+        }
         return maintenanceRepository.save(existant);
     }
 

@@ -38,9 +38,7 @@ public class EquipementServiceImpl implements IEquipementService {
     @Override
     public Equipement update(Long id, Equipement equipement) {
         Equipement existant = findById(id);
-
-        // Recopier ici les attributs modifiables de l'équipement.
-
+        existant.setLibelle(equipement.getLibelle());
         return equipementRepository.save(existant);
     }
 

@@ -38,10 +38,6 @@ public class PaiementServiceImpl implements IPaiementService {
     @Override
     public Paiement update(Long id, Paiement paiement) {
         Paiement existant = findById(id);
-
-        // Recopier ici les attributs modifiables du paiement,
-        // sans toucher à l'identifiant ni aux relations.
-
         return paiementRepository.save(existant);
     }
 

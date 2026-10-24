@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,8 @@ import tn.esprit.autoloc.service.IContratService;
 
 import java.util.List;
 
+
+@Tag(name = "Contrats", description = "Gestion des contrats de location")
 @RestController
 @RequestMapping("/contrats")
 @RequiredArgsConstructor

@@ -33,10 +33,15 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public Client update(Long id, Client client) {
         Client existant = findById(id);
-// recopier ici les autres attributs modifiables du contrat (Atelier 2),
-// sans toucher à l'identifiant ni à la collection de paiements
+        existant.setNom(client.getNom());
+        existant.setPrenom(client.getPrenom());
+        existant.setEmail(client.getEmail());
+        existant.setTelephone(client.getTelephone());
+        existant.setNumPermis(client.getNumPermis());
+        existant.setDateInscription(client.getDateInscription());
         return clientRepository.save(existant);
     }
+
     @Override
     public void deleteById(Long id) {
         if (!clientRepository.existsById(id)) {
