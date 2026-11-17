@@ -8,11 +8,14 @@ import tn.esprit.autoloc.domain.Employe;
 import tn.esprit.autoloc.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.repository.IEmployeRepository;
 import tn.esprit.autoloc.service.IEmployeService;
-
+import org.springframework.transaction.annotation.Transactional;
+import tn.esprit.autoloc.domain.Agence;
+import tn.esprit.autoloc.repository.IAgenceRepository;
 @Service
 @RequiredArgsConstructor
 public class EmployeServiceImpl implements IEmployeService {
 
+    private final IAgenceRepository agenceRepository;
     private final IEmployeRepository employeRepository;
 
     @Override
@@ -51,4 +54,33 @@ public class EmployeServiceImpl implements IEmployeService {
         }
         employeRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional
+    public void affecterEmployeAAgence(Long employeId, Long agenceId) {
+        Employe employe = employeRepository.findById(employeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employe", employeId));
+
+        Agence agence = agenceRepository.findById(agenceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Agence", agenceId));
+
+        employe.setAgence(agence);
+        employeRepository.save(employe);
+    }
+
+    @Override
+    @Transactional
+    public void desaffecterEmployeDeAgence(Long employeId) {
+        Employe employe = employeRepository.findById(employeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employe", employeId));
+
+        if (employe.getAgence() == null) {
+            throw new IllegalArgumentException(
+                    "L'employe " + employeId + " n'est rattache a aucune agence");
+        }
+
+        employe.setAgence(null);
+        employeRepository.save(employe);
+    }
+
 }

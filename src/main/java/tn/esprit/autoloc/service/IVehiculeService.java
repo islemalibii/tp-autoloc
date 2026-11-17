@@ -9,4 +9,7 @@ public interface IVehiculeService {
     List<Vehicule> findAll();
     Vehicule update(Long id, Vehicule vehicule);
     void deleteById(Long id);
+    void affecterVehiculeAAgence(Long vehiculeId, Long agenceId);
+
+    void desaffecterVehiculeDeAgence(Long vehiculeId);
 }

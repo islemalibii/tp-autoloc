@@ -7,5 +7,5 @@ import java.math.BigDecimal;
 
 public interface ITarificationStrategy {
     BigDecimal calculerTarif(Vehicule vehicule, Reservation reservation);
-    String getCode(); // utilise pour selectionner dynamiquement la strategie
+    String getCode();
 }

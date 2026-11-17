@@ -2,6 +2,7 @@ package tn.esprit.autoloc.service.factory;
 
 import org.springframework.stereotype.Component;
 import tn.esprit.autoloc.service.observer.EmailNotificationObserver;
+import tn.esprit.autoloc.service.observer.IReservationObserver;
 import tn.esprit.autoloc.service.observer.SmsNotificationObserver;
 
 @Component
@@ -13,7 +14,14 @@ public class NotificationFactory{
         this.emailNotificationObserver = emailNotificationObserver;
         this.smsNotificationObserver = smsNotificationObserver;
     }
-    /*public ReservationObserver creerObservateur(String canal){
-        // Code à Faire
-    }*/
+    public IReservationObserver creerObservateur(String canal) {
+        if (canal == null) {
+            throw new IllegalArgumentException("Le canal de notification est obligatoire");
+        }
+        return switch (canal.toUpperCase()) {
+            case "EMAIL" -> emailNotificationObserver;
+            case "SMS" -> smsNotificationObserver;
+            default -> throw new IllegalArgumentException("Canal de notification inconnu : " + canal);
+        };
+    }
 }

@@ -61,4 +61,28 @@ public class VehiculeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@Parameter(description = "Identifiant du vehicule") @PathVariable Long id) {
         vehiculeService.deleteById(id);}
+
+
+    @Operation(summary = "Affecter un vehicule a une agence")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Vehicule affecte"),
+            @ApiResponse(responseCode = "404", description = "Vehicule ou agence introuvable")
+    })
+    @PutMapping("/{vehiculeId}/affecter-agence/{agenceId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void affecterAAgence(@PathVariable Long vehiculeId, @PathVariable Long agenceId) {
+        vehiculeService.affecterVehiculeAAgence(vehiculeId, agenceId);
+    }
+
+    @Operation(summary = "Desaffecter un vehicule de son agence")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Vehicule desaffecte"),
+            @ApiResponse(responseCode = "404", description = "Vehicule introuvable"),
+            @ApiResponse(responseCode = "400", description = "Vehicule rattache a aucune agence")
+    })
+    @PutMapping("/{vehiculeId}/desaffecter-agence")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desaffecterDeAgence(@PathVariable Long vehiculeId) {
+        vehiculeService.desaffecterVehiculeDeAgence(vehiculeId);
+    }
 }
