@@ -1,7 +1,6 @@
 package tn.esprit.autoloc.web.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import tn.esprit.autoloc.domain.Paiement;
 import tn.esprit.autoloc.web.dto.PaiementDTO;
@@ -9,11 +8,6 @@ import tn.esprit.autoloc.web.dto.PaiementDTO;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PaiementMapper {
 
-    @Mapping(source = "idPaiement", target = "id")
-    @Mapping(source = "contrat.idContrat", target = "contratId")
     PaiementDTO toDto(Paiement paiement);
-
-    @Mapping(source = "id", target = "idPaiement")
-    @Mapping(target = "contrat", ignore = true)
     Paiement toEntity(PaiementDTO dto);
 }

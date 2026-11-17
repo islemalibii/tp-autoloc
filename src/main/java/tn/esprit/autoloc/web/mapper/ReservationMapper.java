@@ -9,7 +9,6 @@ import tn.esprit.autoloc.web.dto.ReservationResponseDTO;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ReservationMapper {
 
-    @Mapping(target = "id", source = "idReservation")
     @Mapping(target = "clientId", source = "client.idClient")
     @Mapping(target = "clientNomComplet",
             expression = "java(reservation.getClient().getPrenom() + \" \" + reservation.getClient().getNom())")

@@ -2,46 +2,66 @@
 package tn.esprit.autoloc.service.impl;
 
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.domain.Reservation;
+import tn.esprit.autoloc.domain.enums.StatutReservation;
 import tn.esprit.autoloc.exception.ResourceNotFoundException;
+import tn.esprit.autoloc.repository.IClientRepository;
 import tn.esprit.autoloc.repository.IReservationRepository;
+import tn.esprit.autoloc.repository.IVehiculeRepository;
 import tn.esprit.autoloc.service.IReservationService;
+import tn.esprit.autoloc.web.dto.ReservationRequestDTO;
+import tn.esprit.autoloc.web.dto.ReservationResponseDTO;
+import tn.esprit.autoloc.web.mapper.ReservationMapper;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReservationServiceImpl implements IReservationService {
 
     private final IReservationRepository reservationRepository;
+    private final IClientRepository clientRepository;
+    private final IVehiculeRepository vehiculeRepository;
+    private final ReservationMapper reservationMapper;
+
 
     @Override
-    public Reservation create(Reservation reservation) {
-        if (reservation.getIdReservation() != null) {
-            throw new IllegalArgumentException(
-                    "Une nouvelle réservation ne doit pas avoir d'identifiant");
-        }
-        return reservationRepository.save(reservation);
+    public ReservationResponseDTO create(ReservationRequestDTO dto) {
+        Reservation reservation = new Reservation();
+        reservation.setClient(clientRepository.findById(dto.getClientId())
+                .orElseThrow(() -> new ResourceNotFoundException("Client", dto.getClientId())));
+        reservation.setVehicule(vehiculeRepository.findById(dto.getVehiculeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicule", dto.getVehiculeId())));
+        reservation.setDateDebut(dto.getDateDebut());
+        reservation.setDateFin(dto.getDateFin());
+        reservation.setStatut(StatutReservation.CONFIRMEE);
+        return reservationMapper.toDto(reservationRepository.save(reservation));
     }
 
     @Override
-    public Reservation findById(Long id) {
-        return reservationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", id));
+    @Transactional(readOnly = true)
+    public ReservationResponseDTO findById(Long id) {
+        return reservationMapper.toDto(trouver(id));
     }
 
     @Override
-    public List<Reservation> findAll() {
-        return reservationRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<ReservationResponseDTO> findAll() {
+        return reservationRepository.findAll().stream()
+                .map(reservationMapper::toDto)
+                .toList();
     }
 
     @Override
-    public Reservation update(Long id, Reservation reservation) {
-        Reservation existant = findById(id);
-        existant.setDateDebut(reservation.getDateDebut());
-        existant.setDateFin(reservation.getDateFin());
-        existant.setStatut(reservation.getStatut());
-        return reservationRepository.save(existant);
+    public ReservationResponseDTO update(Long id, ReservationRequestDTO dto) {
+        Reservation existant = trouver(id);
+        existant.setDateDebut(dto.getDateDebut());
+        existant.setDateFin(dto.getDateFin());
+        // client, vehicule et statut ne sont pas modifies
+        return reservationMapper.toDto(reservationRepository.save(existant));
     }
 
     @Override
@@ -50,5 +70,10 @@ public class ReservationServiceImpl implements IReservationService {
             throw new ResourceNotFoundException("Reservation", id);
         }
         reservationRepository.deleteById(id);
+    }
+
+    private Reservation trouver(Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", id));
     }
 }
